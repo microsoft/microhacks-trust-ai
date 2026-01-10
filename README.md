@@ -2,7 +2,7 @@
 
 # Microhack - Trustworthy AI
 
-Hands-on Microhack created by Microsoft Office of the CTO Americas, focused on RAG AI.
+Hands-on Microhack created by Microsoft Office of the CTO Americas, focused on Trustworthy AI.
 
 ## Presented by Microsoft Americas Office of the CTO
 
@@ -15,163 +15,70 @@ The Micohack event is designed to engage technical roles through a condensed, ha
 The Microhack event is divided into several key challenges, each carefully crafted to test and expand the participants' proficiency with Microsoft's suite of tools. These challenges are not only technical in nature but also reflect real-world scenarios that businesses face, providing a comprehensive understanding of how to apply theoretical knowledge practically.
 
 ### Core Assets
-* [Microhack Repository](https://github.com/microsoft/microhacks-trust-ai)
-* [Microhack Deck - Agentic AI](docs/Microhack%20Deck%20-%20RAG%20AI.pptx)
-* [Microhack Challenges](docs/Microhack%20Challenges%20-%20RAG%20AI.pdf)
+* [Microhack Repository](https://github.com/DataSciNAll/trustworthy_ai)
+* [Microhack Deck - Trustworthy AI](docs/Microhack_Deck_TrustworthyAI.pptx)
+* [Microhack Challenges](docs/Microhack%20Challenges%20-%20Trustworthy%20AI_UPDATE.pdf)
 
 ### What you will learn
 
-By the end of this workshop, you will learn to build an agent app using Azure AI for RAG, Azure AI Search, explore its tools, and effectively use instructions to guide the LLM.
+By the end of this workshop, you will learn to how to accelerate your Generative AI applicaitons to production and ensure they meet Trustworthy AI standards.  We will share these standards at critical milestones in the software development lifecycle and the tools and procedures to validate their compliance.  This Microhack will cover these topics; Responsible AI, Azure AI Landing Zones, model evaluations, red teaming and observability.  
 
 ## Setting the Stage
 
-To provide attendees with guidance and understanding on the Microhack goals, concepts, and technologies. You can leverage the [Microhack Deck - RAG AI](docs/Microhack%20Deck%20-%20RAG%20AI.pptx).
+To provide attendees with guidance and understanding on the Microhack goals, concepts, and technologies. You can leverage the [Microhack Deck - Trustworthy AI](docs/Microhack_Deck_TrustworthyAI.pptx).
 
 ## Microhack Challenges
 
-To get started with this workshop, open the current [Microhack Challenges](docs/Microhack%20Challenges%20-%20RAG%20AI.pdf).
+To get started with this workshop, open the current [Microhack Challenges](docs/Microhack%20Challenges%20-%20Trustworthy%20AI_UPDATE.pdf).  For a more self-service guidebook, open the individual challenges below for coaches notes.
 
-The **RAG pattern** enables businesses to use the reasoning capabilities of LLMs, using their existing models to process and generate responses based on new data. RAG facilitates periodic data updates without the need for fine-tuning, thereby streamlining the integration of LLMs into businesses. 
+There are four challenges for this workshop.  They are;
 
-The **Enterprise RAG** Solution Accelerator (GPT-RAG) offers a robust architecture tailored for enterprise-grade deployment of the RAG pattern. It ensures grounded responses and is built on Zero-trust security and Responsible AI, ensuring availability, scalability, and auditability. Ideal for organizations transitioning from exploration and PoC stages to full-scale production and MVPs.
+* Challenge 0 [Environment Setup](code/0_challenge/README.md)
+* Challenge 1 [Responsible AI - Designing a Reliable & Ethical Application](code/1_challenge/README.md)
+* Challenge 2 [Well-architected & Trusthworthy Foundation](code/2_challenge/README.md)
+* Challenge 3 [Observability & Operations](code/3_challenge/README.md)
 
-## Application Components
+### Trustworthy AI Overview
 
-GPT-RAG follows a modular approach, consisting of three components, each with a specific function.
+Trustworthy AI ensures your AI investments deliver predictable, high‑quality results by protecting your data, safeguarding your customers, and reducing operational risk. With built‑in security, privacy controls, and measurable safety standards, it provides the stability executives need to make strategic decisions and the clarity teams need to deploy AI with confidence across mission‑critical workflows in production.
 
-* **[Data Ingestion](code/gpt-rag-ingestion)** - Optimizes data chunking and indexing for the RAG retrieval step.
+AI unlocks human potential only when built on trust. Trustworthy AI is Microsoft’s end‑to‑end approach to ensuring AI systems are secure, private, and safe—from design through deployment. Our commitments, including the Secure Future Initiative, Privacy Principles, and Responsible AI principles, set the standard, while our product capabilities operationalize them through evaluation pipelines, groundedness checking, confidential computing, and safety tooling. Together, this forms a complete lifecycle approach to building reliable, responsible, and enterprise‑grade AI.
 
-* **[Orchestrator](code/gpt-rag-orchestrator)** - Coordinates the flow to retrieve information and generate a user response using Semantic Kernel functions.
+**Microsoft’s Responsible AI principles** — Fairness, Reliability & Safety, Privacy & Security, Inclusiveness, Transparency, and Accountability—provide a unified foundation ensuring AI systems are ethical, dependable, and trustworthy from design to deployment. By shifting left and conducting an Impact Assessment early in the development process, teams proactively identify potential harms, data‑sensitivity issues, fairness risks, and misuse scenarios before code is written, aligning architecture, safeguards, and governance with these principles from the outset. This early discipline not only strengthens organizational trust, compliance, and risk management for executives, but also gives developers a clear technical blueprint for building Generative AI systems.
 
-* **[App Front-End](code/gpt-rag-frontend)** - Uses the [Backend for Front-End](https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends) pattern to provide a scalable and efficient web interface.
+**Microsoft’s Secure Future Initiative** is our company-wide mandate to put security above all else, reshaping how we design, build, and operate technology through the principles of Secure by Design, Secure by Default, and Secure Operations. It gives leaders confidence that Microsoft’s cloud and AI platforms are resilient against modern threats while providing developers clear, consistent guidance through hardened engineering standards, strong identity protections, and continuous monitoring. By embedding these practices early in the development lifecycle—together with Azure AI Landing Zones to ensure secure, governed, and well‑architected AI deployments—organizations can reduce risk, strengthen resilience, and maintain the trust that customers and partners expect.
 
-<!-- * [Teams-BOT](https://github.com/Azure/gpt-rag-bot) Constructed using Azure BOT Services, this platform enables users to engage with the Orchestrator seamlessly through the Microsoft Teams interface. -->
+**Evaluation pipelines** are essential to Trustworthy AI because they validate system behavior across every stage of development—starting with manual reviews that catch early design risks, progressing to automated tests that measure groundedness, relevance, safety, and bias at scale, and extending into continuous evaluation that monitors real‑world performance over time. By embedding these manual, automated, and continuous checks directly into the development lifecycle, organizations gain evidence‑based assurance that their AI systems remain reliable, secure, and aligned with business and user expectations from initial design through ongoing operation.
 
-<!-- 
-Removing temporarily while not finished
-## GPT-RAG Integration HUB
-* [SQL Integration](https://github.com/Azure/gpt-rag-int-sql) Connect the GPT-RAG Infrastructure to SQL using NL2SQL. -->
+**Red Teaming** is a critical component of Trustworthy AI because it pressure‑tests systems against real‑world threats, unsafe behaviors, and adversarial misuse before those risks ever reach customers. By combining manual adversarial testing, automated attack simulations, and continuous red‑teaming cycles that evolve with emerging threat patterns, organizations can uncover vulnerabilities that traditional testing misses—ranging from prompt‑based exploits and safety bypasses to data‑leakage risks and harmful output scenarios. These tests should mitigate risks and gain confidence to deploy them into production.
+
+**Observability** is essential to Trustworthy AI because it provides continuous insight into how AI systems behave in production, allowing engineering teams and governance committees to detect anomalies, track model drift, and ensure outputs remain safe and reliable. With real‑time logs, traces, and performance signals, organizations can quickly identify unexpected behaviors and take appropriate action through structured operational controls that allow systems to be safely paused or adjusted when needed. This level of continuous monitoring ensures AI deployments remain aligned with organizational standards, regulatory expectations, and user trust throughout their lifecycle.
+
+## Software Development Lifcycle
+
+Generative AI development lifecycle follows a modular approach, consisting of three components, each with a specific function.
+
+* **[Planning](docs/prototype.md)** - Planning your generative‑AI or agent scenario — choosing the model, deciding on tools, grounding sources, and evaluation needs.
+
+* **[Develop](docs/develop.md)** - Moving from prototyping into development — running pre‑production evaluations to decide which candidate is ready to advance.
+
+* **[Operate](docs/operate.md)** - Operating in production — continuously monitoring quality, safety, performance, and tracing issues as users interact with the agent.
+
+A strong governance posture depends on treating AI as a system that must be planned, developed, and operated with the same rigor as any mission‑critical technology. Trustworthy AI provides that foundation—clear expectations up front, disciplined evaluation and risk mitigation during development, and continuous monitoring once deployed. By applying these safeguards across the full lifecycle, organizations ensure their AI remains reliable, aligned with policy, and accountable to the standards their leaders and customers expect. This creates a governance model that is proactive, measurable, and resilient as AI systems evolve.
 
 ## Concepts
 
-If you want to learn more about the RAG Pattern and GPT-RAG architecture.
+If you want to learn more about Trustworthy AI, here are further resources.
 
-* [RAG Pattern: What and Why?](docs/RAG_CONCEPTS.md)
+1. [Microsoft Trustworkthy AI](https://blogs.microsoft.com/blog/2024/09/24/microsoft-trustworthy-ai-unlocking-human-potential-starts-with-trust/)
 
-* [Solution Architecture Overview](docs/ARCHITECTURE.md)
+1. [Secure Future Intitiative](https://go.microsoft.com/fwlink/?linkid=2341428&clcid=0x409&culture=en-us&country=us) 
 
-* [ZeroTrust Architecture Overview](media/GPT-RAG-ZeroTrust.png)
+1. [Model Evaluation](https://www.youtube.com/watch?v=lyCLu53fb3g)
 
-<!-- <a href="https://www.youtube.com/watch?v=ICsf4yirieA"><img src="https://img.youtube.com/vi/ICsf4yirieA/0.jpg" alt="Alt text" width="480"/></a> -->
+1. [Red Teaming](https://learn.microsoft.com/en-us/security/ai-red-team/)
 
-## Setup Guide
-
-1) **Basic Architecture Deployment:** *for quick demos with no network isolation*⚙️
-
-Learn how to **quickly set up** the basic architecture for scenarios without network isolation. [Click the link to proceed](#getting-started).
-
-
-## Getting Started
-
-This guide will walk you through the deployment process of Enterprise RAG. Before beginning the deployment, please ensure you have prepared all the necessary tools and services as outlined in the **Pre-requisites** section.
-
-**Pre-requisites**
-
- - Azure Developer CLI: [Download azd](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) 
-   - Ensure the correct OS is selected
- - Powershell 7+ with AZ module (Windows only): [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4#installing-the-msi-package), [AZ Module](https://learn.microsoft.com/en-us/powershell/azure/what-is-azure-powershell?view=azps-11.6.0#the-az-powershell-module)
- - Git: [Download Git](https://git-scm.com/downloads)
- - Node.js 16+ [windows/mac](https://nodejs.dev/en/download/)  [linux/wsl](https://nodejs.dev/en/download/package-manager/)
- - Python 3.11: [Download Python](https://www.python.org/downloads/release/python-3118/)
- - Initiate an [Azure AI services creation](https://portal.azure.com/#create/Microsoft.CognitiveServicesAllInOne) and agree to the Responsible AI terms **
-   - ** If you have not created an Azure AI service resource in the subscription before
-
-### Basic Architecture Deployment
-
-For quick demonstrations or proof-of-concept projects without network isolation requirements, you can deploy the accelerator using its basic architecture.
-![Basic Architecture](media/architecture-GPT-RAG-Basic.png)
-
-The deployment procedure is quite simple, just install the prerequisites mentioned above and follow these four steps using [Azure Developer CLI (azd)](https://aka.ms/azure-dev/install) in a terminal:
-
-
-**1** Download the Repository:
-
-```sh
-azd init
-```
-
-**1.a** Give the environment a unique name. This will be used to create your resources. For example, _cowboy-hats_ would create resource group _rg-cowboy-hats_.
-```sh
-Enter a new environment name: some-name-here
-```
-
-**2** Login to Azure:
-
-**2.a** Azure Developer CLI:
-
-```sh
-azd auth login
-```
-
-**2.b** Azure CLI:
-
-```sh
-az login
-```
-**2.c** Select your Azure Subscription from list.
-
-**3** Start Building the infrastructure and components deployment:
-
-```sh
-azd up
-```
-**3.a** Select your Azure Subscription from list.
-
-**3.b** Select Azure region. _Recommended: East US (eastus)_
-
-**4** Add source documents to object storage from _/datasources_ directory.
-
-Upload your documents to the 'documents' folder located in the storage account. The name of this account should start with 'strag'. This is the default storage account, as shown in the sample image below.
-
- ![storage_sample](media/readme-storage_sample.png)
-
-**Done! Basic deployment is completed.**
-
-**Recommended**: [Add app authentication](https://learn.microsoft.com/en-us/azure/app-service/scenario-secure-app-authentication-app-service). [Watch this quick tutorial](https://youtu.be/sA-an25jMB4) for step-by-step guidance.
-
-## How to?
-
-### Customize Your Deployment
-
-The standard deployment process sets up Azure resources and deploys the accelerator components with a standard configuration. To tailor the deployment to your specific needs, follow the steps in the [Custom Deployment](docs/CUSTOMIZATIONS.md) section for further customization options.
-
-### Integrate with Additional Data Sources
-  
-Expand your data retrieval capabilities by integrating new data sources such as Bing Custom Search, SQL Server, and Teradata. For detailed instructions, refer to the [AI Integration Hub](docs/AI_INTEGRATION_HUB.md) page.
-
-### Multi-Environment Deployment
-
-Once you've successfully deployed the GPT-RAG solution as a proof of concept and you're ready to formalize the deployment using a proper CI/CD process to accelerate your deployment to production, refer to the multi-environment deployment guides for either [Azure DevOps](./docs/AZDO-SETUP.md) or [GitHub](./docs/GH-SETUP.md).
- 
-### Troubleshoot Deployment Issues
-
-If you encounter any errors during the deployment process, consult the [Troubleshooting](docs/TROUBLESHOOTING.md) page for guidance on resolving common issues.
-
-### Evaluate Performance
-
-To assess the performance of your deployment, refer to the [Performance Testing](docs/PERFTEST.md) guide for testing methodologies and best practices.
-
-### Query the Conversation History
-
-Learn how to query and analyze conversation data by following the steps outlined in the [How to Query and Analyze Conversations](docs/QUERYING_CONVERSATIONS.md) document.
-
-### Estimate Pricing
-
-Understand the cost implications of your deployment by reviewing the [Pricing Model](https://github.com/Azure/GPT-RAG/wiki/GPT%E2%80%90RAG-%E2%80%90-Pricing-Model) for detailed pricing estimation.
-
-### Manage Governance
-
-Ensure proper governance of your deployment by following the guidelines provided in the [Governance Model](https://share.mindmanager.com/#publish/9ogrdWqzmAzZB6ilgURohV4lj1LriKjOWc0w_u2U).
+1. [Observability](https://build.microsoft.com/en-US/sessions/BRK168)
 
 ## Contributing
 
