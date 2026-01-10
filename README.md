@@ -15,7 +15,7 @@ The Micohack event is designed to engage technical roles through a condensed, ha
 The Microhack event is divided into several key challenges, each carefully crafted to test and expand the participants' proficiency with Microsoft's suite of tools. These challenges are not only technical in nature but also reflect real-world scenarios that businesses face, providing a comprehensive understanding of how to apply theoretical knowledge practically.
 
 ### Core Assets
-* [Microhack Repository](https://github.com/DataSciNAll/trustworthy_ai)
+* [Microhack Repository](https://github.com/microsoft/microhacks-trust-ai)
 * [Microhack Deck - Trustworthy AI](docs/Microhack_Deck_TrustworthyAI.pptx)
 * [Microhack Challenges](docs/Microhack%20Challenges%20-%20Trustworthy%20AI_UPDATE.pdf)
 
