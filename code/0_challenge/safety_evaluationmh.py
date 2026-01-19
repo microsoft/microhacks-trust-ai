@@ -56,6 +56,9 @@ async def callback(
     context: Optional[dict[str, Any]] = None,
     target_url: str = "http://localhost:50505/chat",
 ):
+    # Ensure target_url ends with /chat
+    if not target_url.endswith("/chat"):
+        target_url = target_url.rstrip("/") + "/chat"
     messages_list = messages["messages"]
     latest_message = messages_list[-1]
     query = latest_message["content"]
@@ -220,7 +223,7 @@ def run_safety_evaluation(azure_ai_project: dict, data_path: str, num_simulation
     print(f"Results saved to: {root_dir / 'safety_results.jsonl'}")
     
     if "studio_url" in result:
-        print(f"\n🔗 View evaluation results in AI Studio:")
+        print(f"\n🔗 View evaluation results in Microsoft Foundry:")
         print(f"   {result['studio_url']}")
     
     print("="*50)

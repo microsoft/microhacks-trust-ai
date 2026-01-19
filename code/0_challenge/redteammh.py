@@ -4,6 +4,7 @@ Red Teaming Script for Azure Search OpenAI Demo Application
 
 This script performs automated adversarial testing (red teaming) of the RAG application
 to identify potential safety vulnerabilities across multiple risk categories.
+For runtime constraints we are only using Basic and have commented out the Advanced scan.
 
 Based on: https://github.com/Azure-Samples/azureai-samples/blob/main/scenarios/evaluate/AI_RedTeaming/AI_RedTeaming.ipynb
 
@@ -16,45 +17,17 @@ import asyncio
 from pathlib import Path
 from typing import Any, Dict
 from pprint import pprint
-
-# Azure imports
-from azure.identity import DefaultAzureCredential
-from azure.ai.evaluation.red_team import RedTeam, RiskCategory, AttackStrategy
-from dotenv_azd import load_azd_env
 import requests
-
-# Load environment variables
-load_azd_env()
-
-# Configure Azure AI project for red teaming
-azure_ai_project = os.getenv("AZURE_AI_PROJECT_ENDPOINT")
-
-# Backend URL - adjust based on where your app is running
-# Remove trailing slash to prevent double slash in URLs
-BACKEND_URL = os.getenv("BACKEND_URI", "http://localhost:50505")
-
-# Initialize Azure credential
-credential = DefaultAzureCredential()
 
 
 # ----------------------------------------------
 # 1. Define Target Callback Function
 # ----------------------------------------------
 def rag_application_callback(query: str) -> str:
-    """
-    Callback function that targets the RAG application backend API.
-    This function is called by the red team simulator to test the application.
-    
-    Args:
-        query: The adversarial query from the red team simulator
-        
-    Returns:
-        String response from the RAG application
-    """
     try:
-        # Call the /ask endpoint of the RAG application
+        # Call the /chat endpoint of the RAG application
         response = requests.post(
-            f"{BACKEND_URL}/ask",
+            f"{BACKEND_URL}/chat",
             json={
                 "messages": [{"content": query, "role": "user"}],
                 "context": {
@@ -104,18 +77,14 @@ async def run_red_team_scan():
         health_check = requests.get(f"{BACKEND_URL}/", timeout=5)
         print(f"✅ Backend is accessible at {BACKEND_URL}")
     except requests.exceptions.RequestException as e:
-        print(f"⚠️ Error: Cannot connect to backend at {BACKEND_URL}")
-        print(f"   Make sure the backend is running. Error: {e}")
-        print(f"   You can start it with the 'Development' task or:")
-        print(f"   python app/backend/app.py")
+        print(f"⚠️ Warning: Cannot connect to backend at {BACKEND_URL}")
+        print(f"   Make sure the backend is started. Error: {e}")
+        print(f"   Rerun script since container might be idle.  Rerun no more than 5 times.")
         return
     
     print("\n" + "="*70)
     print("🎯 Starting Red Team Evaluation of RAG Application")
     print("="*70)
-    print(f"Backend URL: {BACKEND_URL}")
-    #print(f"Azure AI Project: {azure_ai_project.get('project_name')}")
-    print()
     
     # Create output directory
     output_dir = Path("evals/redteam_results")
@@ -237,13 +206,7 @@ async def run_red_team_scan():
     print("   - Vulnerability by Risk Category: Which content types are most vulnerable")
     print("   - Effectiveness of Attack Strategies: Which techniques work best")
     print()
-    print("🔍 Next Steps:")
-    print("   1. Review the JSON files for detailed conversation logs")
-    print("   2. Identify patterns in successful attacks")
-    print("   3. Implement mitigations for identified vulnerabilities")
-    print("   4. Re-run scans to validate improvements")
-    print()
-    print("💡 Tip: View results in Azure AI Foundry portal for interactive analysis")
+    print("💡 Tip: View results in Microsoft Foundry portal for interactive analysis")
     print("="*70)
 
 
@@ -251,6 +214,25 @@ async def run_red_team_scan():
 # Main Execution
 # ----------------------------------------------
 if __name__ == "__main__":
+    
+    # Azure imports
+    from azure.identity import DefaultAzureCredential
+    from azure.ai.evaluation.red_team import RedTeam, RiskCategory, AttackStrategy
+    from dotenv_azd import load_azd_env
+    
+    # Load environment variables
+    load_azd_env()
+
+    # Configure Azure AI project for red teaming
+    azure_ai_project = os.getenv("AZURE_AI_PROJECT_ENDPOINT")
+
+    # Backend URL - adjust based on where your app is running
+    # BACKEND_URL will be set after environment variables are loaded in __main__
+    BACKEND_URL = os.getenv("BACKEND_URI", "http://localhost:50505")
+
+    # Initialize Azure credential
+    credential = DefaultAzureCredential()
+    
     # Run the async red team scan
     asyncio.run(run_red_team_scan())
 
@@ -258,21 +240,17 @@ if __name__ == "__main__":
 # ----------------------------------------------
 # Usage Instructions:
 #
-# 1. Start the backend application:
-#    - Run the "Development" task in VS Code
-#    - Or: python app/backend/app.py
-#    - Or: ./app/start.sh
+# 1. Start the Azure Container Service
+#    - Review BACKEND_URI to ensure same as Application URL in Azure Container Service
 #
 # 2. Ensure environment variables are set:
-#    - AZURE_SUBSCRIPTION_ID
-#    - AZURE_RESOURCE_GROUP
-#    - AZURE_AI_PROJECT
+#    - AZURE_AI_PROJECT_ENDPOINT  (Project Endpoint from Foundry Portal)
 #    - BACKEND_URL (optional, defaults to http://localhost:50505)
 #
 # 3. Run the red team scan:
 #    python evals/redteam.py
 #
-# 4. Review results in evals/redteam_results/
+# 4. Review results in evals/redteam_results/ or Azure Foundry Project
 #
 # ----------------------------------------------
 # Understanding Risk Categories:

@@ -37,10 +37,10 @@ Microsoft has developed Azure Review Checklists available to allow customers an 
    ![Alt text](/media/managefiles.jpg "Manage Files")
 <br>
 
-4. Run this command in the bash termimnal for CloudShell
+4. Run this command in the bash termimnal for CloudShell to change the file permissions
     
     ```bash
-     chmod +xr ./checklist_graph.sh to change the file permissions
+     chmod +xr ./checklist_graph.sh
      ```
 
 5. Run this command in the terminal
@@ -56,24 +56,27 @@ Microsoft has developed Azure Review Checklists available to allow customers an 
 
 <br>
 
-7. Download the [Azure Review Checklist](https://github.com/Azure/review-checklists/releases/latest/download/review_checklist.xlsm).  Click the control button "Import latest" in the Azure Review Checklist box. After you accept the verification message, the spreadsheet will load the latest version of the _AI Landing Zone Checklist_.
+7. Download the [Azure Review Checklist](https://github.com/Azure/review-checklists/releases/latest/download/review_checklist.xlsm).  Go into the File properities for the downloaded file and "unblock" the execution of macros.
+
+   ![Alt text](/media/unblockmacro.jpg "Unblock Macros")
 <br>
+
+8. Click the control button "Import latest" in the Azure Review Checklist box. After you accept the verification message, the spreadsheet will load the latest version of the _AI Landing Zone Checklist_.
 
    ![Alt text](/media/spreadsheet_screenshot.png "Spreadsheet Screenshot")
-   
+
 <br>
 
-8. In the spreadsheet, use the Advanced command "Import Graph Results" to import the previously downloaded file in Step #6.
+9. In the spreadsheet, use the Advanced command "Import Graph Results" to import the previously downloaded file in Step #6.
 <br>
 
    ![Alt text](/media/advanced_commands.png "Advanced Commands Screenshot")
    
 <br>
 
-9. Review the checklist items and their status to see which ones are out of compliance.  The "Comments" column of the spreadsheet will fill in with the results of the Azure Graph Queries, and display resource IDs that are compliant or non-compliant with the recommendation.
-<br>
+10. Review the checklist items and their status to see which ones are out of compliance.  The "Comments" column of the spreadsheet will fill in with the results of the Azure Graph Queries, and display resource IDs that are compliant or non-compliant with the recommendation.
 
-   ![Alt text](/media/alz_checklist.png "ALZ Review Checklist")
+      ![Alt text](/media/alz_checklist.png "ALZ Review Checklist")
 <br>
 <br>
 
@@ -95,15 +98,10 @@ In Challenge 1, we tested our application with a small subset of questions and h
 1. Go to the command line terminal in codespaces and submit this script to run quality metrics.  
 
     ```bash
-    python evals/evaluate.py
+    python evals/evaluatemh.py
     ```
 
-      The parameters are:
-      * ```numquestions```: The number of questions to evaluate. By default, this is all questions in the ground truth data.
-      * ```resultsdir```: The directory to write the evaluation results. By default, this is a timestamped folder in evals/results. This option can also be specified in evaluate_config.json.
-      * ```targeturl```: The URL of the running application to evaluate. By default, this is http://localhost:50505
-
-   If you are using the default settings it will take approximately 5 minutes for this to complete. Go into the Microsoft Foundry and review the Automated Evaluations.  Review each Q&A pair for these scores and reason.  
+   If you are using the default settings it will take approximately 1 minutes for this to complete. The Target application is running in a container and might need you to rerun this script multiple times when it times-out.  Go into the Microsoft Foundry and review the Automated Evaluations.  Review each Q&A pair for these scores and reason.  
 
 1. For each metric, review the number of success and failures in the Foundry portal to see overall success rate.  
 
@@ -114,13 +112,13 @@ In Challenge 1, we tested our application with a small subset of questions and h
 1. The second set of evaluations will be for the safety metrics.  Safety evaluations will ensure the answers are appropriate and do not contain harmful or sensitive content. Run this command in the terminal.
 
    ```bash
-   python evals/safety_evaluation.py --target_url <TARGET_URL> --max_simulations <MAX_RESULTS>
+   python evals/safety_evaluationmh.py --target_url <TARGET_URL> --max_simulations <MAX_RESULTS>
    ```
    The parameters are:
-   * `--target_url`: The target URL for the callback. Default is `http://localhost:50505/chat`.
-   * `--max_simulations`: The maximum number of simulated user queries. Default is `200`. The higher the number, the longer the evaluation will take. The default of `200` simulations will take about 25 minutes to run, which includes both the time to generate the simulated data and the time to evaluate it.
+   * `--target_url`: The target URL for the callback. Default is `http://localhost:50505/chat`.  The TARGET_URL is the Application URL in the Azure Container App.
+   * `--max_simulations`: The maximum number of simulated user queries. Default is `200`. The higher the number, the longer the evaluation will take. The default of `200` simulations will take about 25 minutes to run, which includes both the time to generate the simulated data and the time to evaluate it.  
 
-   We recommend to keep the max simulations to '5' for the number of times the script will ask follow-up questions from the main question in your question & answer pair.  For time/cost reasons, we are only using five simulations but recommended for production workloads to test larger number of simulations. For further instructions on [safety evaluations](https://github.com/Azure-Samples/azure-search-openai-demo/blob/main/docs/safety_evaluation.md), review this file for guidance.
+   We recommend to keep the max simulations to '2' for the number of times the script will ask follow-up questions from the main question in your question & answer pair.  For time/cost reasons, we are only using five simulations but recommended for production workloads to test larger number of simulations. For further instructions on [safety evaluations](https://github.com/Azure-Samples/azure-search-openai-demo/blob/main/docs/safety_evaluation.md), review this file for guidance.
  
  1. Evaluate the Safety metrics and share with the team to determine if they are acceptable.  
 
@@ -135,16 +133,10 @@ Automated Quality & Safety evaluations have validated our application meets our 
 
 The AI Red Team Agent will be able to assess risk categories and attack strategies to assess the Attack Success Rate of your application.  The lower the score the more secure your application.  The justification for these tests are to run simulations of attacks based on known threats.  It is recommended to conduct both automated and human red teaming to cover the known and unknown attack strategies before you roll out to production. 
 
-1. Install Azure AI Evaluation SDK’s red team package 
-
-   ```bash
-   pip install azure-ai-evaluation[redteam]
-   ```
-
 1. Execute the Red Team agent script.  The Red Teaming agent will use a library of [attack prompts across categories](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic#supported-risk-categories) (privacy, toxicity, jailbreak attempts, etc.) as defined by RiskCategories in PyRIT.
 
    ```bash
-   python evals/redteam.py
+   python evals/redteammh.py
    ```
 
 1. The [AI Red teaming results](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic#results-from-your-automated-scans) typically categorizes findings like: number of attempts where the LLM gave a policy-violating response vs. how many it safely refused. Focus on critical categories: Did the LLM ever reveal the content of its system prompt or internal knowledge (a sign of prompt injection success)? Did it produce disallowed content (e.g., instructions to do something harmful) when provoked?  

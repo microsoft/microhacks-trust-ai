@@ -5,43 +5,21 @@
 # Uses Azure AI Foundry project for results upload
 # ----------------------------------------------
 
-# ----------------------------------------------
-# 1. Create AI Project Client and Load Config
-# ----------------------------------------------
 import os
-import json
 import pandas as pd
 import requests
 from pathlib import Path
 from typing import TypedDict
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
-from azure.ai.evaluation import evaluate
-from azure.ai.evaluation import RelevanceEvaluator, GroundednessEvaluator
-from azure.ai.evaluation import AzureOpenAIModelConfiguration
-
 from pprint import pprint
 
-# Note: Environment variables are loaded in the if __name__ == "__main__" block
-# to avoid issues with multiprocessing when spawning child processes
-
 # ----------------------------------------------
-# 2. Define Evaluator Model Configuration
+# 1. Define Target Function to Query RAG App
 # ----------------------------------------------
-# These will be initialized in the main block after loading environment variables
-
-# ----------------------------------------------
-# 3. Define Target Function to Query RAG App
-# ----------------------------------------------
-# Set the backend URL - adjust based on where your app is running
-BACKEND_URL = os.getenv("BACKEND_URI", "http://localhost:50505")
-
 
 class RagResponse(TypedDict):
     """Response structure from RAG application evaluation."""
     response: str
     context: str
-
 
 def evaluate_rag_application(question: str) -> RagResponse:
     """
@@ -54,10 +32,13 @@ def evaluate_rag_application(question: str) -> RagResponse:
     Returns:
         RagResponse with response and context for evaluation
     """
+    # Read BACKEND_URL from environment each time to support multiprocessing
+    backend_url = os.getenv("BACKEND_URI", "http://localhost:50505")
+    
     try:
-        # Call the /ask endpoint of the RAG application
+        # Call the /chat endpoint of the RAG application
         response = requests.post(
-            f"{BACKEND_URL}/ask",
+            f"{backend_url}/chat",
             json={
                 "messages": [{"content": question, "role": "user"}],
                 "context": {
@@ -95,21 +76,24 @@ def evaluate_rag_application(question: str) -> RagResponse:
             response=f"Error: {str(e)}",
             context=""
         )
-
-
 # ----------------------------------------------
-# 4. Run the Evaluation
-#    View Results Locally (Saved as JSON)
+# 2. Run the Evaluation
+#    View Results Locally (Saved as JSONL)
 #    Upload Results to AI Foundry Portal
 # ----------------------------------------------
 # Evaluation must be called inside of __main__, not on import
 if __name__ == "__main__":
     import contextlib
     import multiprocessing
+    from azure.identity import DefaultAzureCredential
+    from azure.ai.evaluation import evaluate
+    from azure.ai.evaluation import RelevanceEvaluator, GroundednessEvaluator
+    from azure.ai.evaluation import AzureOpenAIModelConfiguration
     from dotenv_azd import load_azd_env
     
-    # Load environment variables FIRST, before any multiprocessing
     load_azd_env()
+    
+    BACKEND_URL = os.getenv("BACKEND_URI", "http://localhost:50505")
     
     # Configure Azure AI project for uploading results to AI Foundry
     # New Foundry projects without workspace use the project endpoint URL directly
@@ -136,8 +120,8 @@ if __name__ == "__main__":
         print(f"✅ Backend is accessible at {BACKEND_URL}")
     except requests.exceptions.RequestException as e:
         print(f"⚠️ Warning: Cannot connect to backend at {BACKEND_URL}")
-        print(f"   Make sure the backend is running. Error: {e}")
-        print(f"   You can start it with: 'python app/backend/app.py' or use the Development task")
+        print(f"   Make sure the backend is started. Error: {e}")
+        print(f"   Rerun script since container might be idle.  Rerun no more than 5 times.")
         exit(1)
     
     # Define the path to evaluation data
@@ -147,7 +131,6 @@ if __name__ == "__main__":
     if not data_path.exists():
         print(f"⚠️ Warning: Data file not found at {data_path}")
         print("   Please provide a valid evaluation data file with 'question' field")
-        print("   Example format: {'question': 'What are the health benefits?'}")
         exit(1)
     
     print(f"\n🔍 Starting evaluation of target application...")
@@ -195,7 +178,7 @@ if __name__ == "__main__":
     print(f"Results saved to: ./evals/results_target.jsonl")
     
     if "studio_url" in result:
-        print(f"\n🔗 View evaluation results in AI Studio:")
+        print(f"\n🔗 View evaluation results in Microsoft Foundry:")
         print(f"   {result['studio_url']}")
     
     print("="*50)
@@ -204,27 +187,23 @@ if __name__ == "__main__":
 # ----------------------------------------------
 # How to Run This Evaluation:
 # 
-# 1. Make sure the backend application is running:
-#    - Run: python app/backend/app.py
-#    - Or use VS Code task: "Backend: quart run"
-#    - Or start full app: "Development" task
+# 1. Make sure backend application is running and copy the URI from Azure
+#    - Login to Azure portal
+#    - Find Azure Container App in resource group
+#    - Copy Application Url and confirm the same value as BACKEND_URI in env file
 #
 # 2. Ensure you have evaluation data file:
-#    - Default: evals/results/baseline-ask/eval_results.jsonl
+#    - Default: evals/generate_truth_test.jsonl
 #    - Format: Each line should have a "question" field
 #    - Example: {"question": "What are the health benefits?"}
+#    - Test file contains two records to shorten evaluation time.  Actual file is ground_truth.jsonl
 #
 # 3. Set required environment variables (loaded via load_azd_env):
 #    - AZURE_AI_PROJECT_ENDPOINT (for new Foundry projects without workspace)
-#    - AZURE_OPENAI_ENDPOINT
-#    - AZURE_OPENAI_EVAL_DEPLOYMENT
+#    - BACKEND_URI (e.g. http://localhost:50505 or your deployed app URL)
 #
 # 4. Run the evaluation:
-#    python evals/evaluatetarget.py
-#
-# Optional: Set custom backend URL
-#    export BACKEND_URL=http://localhost:50505
-#    python evals/evaluatetarget.py
+#    python evals/evaluate.py
 #
 # ----------------------------------------------
 # Expected Output:
@@ -236,5 +215,4 @@ if __name__ == "__main__":
 # - Save results locally to evals/results_target.jsonl
 # - Upload results to Azure AI Foundry portal
 # - Display summarized metrics and tabular results
-#
 # ----------------------------------------------
