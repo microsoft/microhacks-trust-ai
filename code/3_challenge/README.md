@@ -1,10 +1,7 @@
 # Challenge 3: Observability & Operations
 
 ## Overview
-With a green light from UAT, the Contoso chatbot is ready to go live.  
-The final challenge ensures a smooth MLOps/DevOps deployment and robust observability once in production.
-
-In practice, many AI failures occur not from initial design flaws but from lack of monitoring – for example:
+With a green light from UAT, the Contoso chatbot is ready to go live.  The final challenge ensures a smooth MLOps/DevOps deployment and robust observability once in production.  In practice, many AI failures occur not from initial design flaws but from lack of monitoring – for example:
 - Model drift
 - Silent outages
 - Undetected failures in production
@@ -16,6 +13,12 @@ To prevent this, participants will:
 - Conduct a Red/Blue Team exercise on the live system
 
 This completes the DevOps loop and achieves the **Operate stage of Responsible AI (RAI)**.
+
+## Tools & Config Needed
+
+- Microsoft Foundry Tracing and Monitoring
+- Automated evaluations using GitHub Actions CI/CD pipeline
+- Microsoft Foundry Content Safety configurations
 
 ---
 ## Lab Activities
@@ -36,61 +39,60 @@ Create a GitHub Actions workflow that automates building and deploying the chatb
 
 #### Assumptions
 - You already generated ground truth data
-- You already executed and tested evaluation manually in Challenge 2
+- You already executed and tested automated evaluations in Challenge 2
 - You already forked the origin/upstream repository
 
 ---
 
 ### Lab 1 – Instructions
 
-- Before you run the pipeline, check evals/evaluate_config.json and ground_truth.jsonl.
-- evals/evaluate_config.json - "testdata_path": "ground_truth.jsonl"
-- ground_truth.jsonl - make sure you have 5 questions, having more questions may take longer to run the evaluation pipeline. 
+1. Before you run the pipeline, check evals/evaluate_config.json and ground_truth_test.jsonl files to ensure they have data.
 
-- Configure the pipeline using below command.
+1. Update ```evals/evaluate_config.json``` file and update the ```testdata_path```: to ```ground_truth_test.jsonl```  Ground_truth_test.jsonl - This file has 2 questions, having more questions may take longer to run the evaluation pipeline. 
+
+1. Change the target_url from localhost to your Application URL found in Azure Container Service.
+
+1. Configure the pipeline using below command.
 
     ```bash
        azd pipeline config
      ```
-- Log in using Github CLI – YES
-- Preferred protocol – HTTPS
-- Authenticate git with your GitHub Credential – YES
-- This will open a web browser to authenticate, copy and enter the code in browser.
-- Select “Federated Service Principal (SP + OIDC)” to authenticate the pipeline to Azure
+1. During the execution of the above command it will ask you the following questions with correct answers.
+
+    - Log in using Github CLI – YES
+    - Preferred protocol – HTTPS
+    - Authenticate git with your GitHub Credential – YES
+    - This will open a web browser to authenticate, copy and enter the code in browser.
+    - Select “Federated Service Principal (SP + OIDC)” to authenticate the pipeline to Azure
 
 ![config eval pipeline1](../../media/gith-azd-pipe-conf1.png)
 
 ![config eval pipeline](../../media/azdpipeconfig.png)
 
-- Check all environment settings in GitHub:
-  - GitHub Repo Settings → Secrets and Variables → Actions
+6. Check all environment settings in GitHub:
+
+    - GitHub Repo Settings → Secrets and Variables → Actions
 
 ![git env vars](../../media/gitenvvars.png)
 
-- Create a test feature branch
-- Make a minor change and open a pull request
+7. Create a test feature branch
+    - Make a minor change to the README file and open a pull request
 
----
-
-### Triggering Evaluation
-
-- Put `/evaluate` in the pull request comment section to trigger the workflow
+8. Triggering Evaluation by putting ```/evaluate``` in the pull request comment section to trigger the workflow
 
 ![git eval trigger](../../media/gitevaltrigger.png)
 
-- Go to GitHub Actions
-- Click **Evaluate RAG answer flow** to see the workflow status
+9. Go to GitHub Actions and click **Evaluate RAG answer flow** to see the workflow status
 
 ![git eval status1](../../media/gitevalstatus1.png)
 
 ![git eval status2](../../media/gitevalstatus2.png)
----
 
-### Evaluation Results
 
-- Once evaluation completes, results are published directly in the GitHub Pull Request
-- Status notifications are also sent via email
-- After testing, the workflow can be updated to run only when changes are merged into `main` or `master`
+10. Evaluation Results
+    - Once evaluation completes, results are published directly in the GitHub Pull Request
+    - Status notifications are also sent via email
+    - After testing, the workflow can be updated to run only when changes are merged into `main` or `master`
 
 ![git pr eval result](../../media/gitprevalresult.png)
 
@@ -109,29 +111,7 @@ Connect the running application to Application Insights and enable full observab
 ### Objective
 Analyze chat interactions and thought processes using tracing capabilities.
 
----
-
-### Assumptions
-- Azure OpenAI resource has been upgraded to Microsoft Foundry
-
-![openai upgrade to foundry](../../media/upgradeopenaitofoundry.png)
----
-
-### Lab 2 – Instructions
-
-- Connect Application Insights resource with a Foundry project  
-  *(Initial setup deploys Azure OpenAI, not Foundry)*
-- Recommendation: Link with Foundry project created in Challenge 0
-- Go to Foundry Portal
-- Select the Foundry project (not Azure OpenAI instance)
-- Navigate to **Tracing → Manage data source**
-
-![conn app ins to foundry1](../../media/connappinsfoundry1.png)
-
-![conn app ins to foundry2](../../media/connappinsfoundry2.png)
-
-- Add the Application Insights resource
-- Refresh and view populated tracing results
+- View populated tracing results
 
 ![view trace1](../../media/viewtrace1.png)
 
@@ -148,12 +128,14 @@ Monitor and troubleshoot chatbot and model metrics for operational health.
 ### View Model-Related Metrics
 
 Steps:
-- Go to Foundry Portal
-- Select Azure OpenAI instance
-- Navigate to:
-  - Deployments **or**
-  - Monitoring tab
-- Select model deployment
+1. Go to Foundry Portal
+
+1. Select Azure OpenAI instance
+
+1. Navigate to:
+    - Deployments **or**
+    - Monitoring tab
+    - Select model deployment
 
 ![view monitoring1](../../media/monitoringmodelmetrics1.png)
 
@@ -172,10 +154,10 @@ Metrics include:
 #### View Log Analytics Metrics
 
 Steps:
-- Go to Azure Portal
-- Select the resource group deployed in Challenge 0
-- Navigate to Log Analytics Workspace → Monitoring
-- Select metrics to monitor
+1. Go to Azure Portal
+1. Select the resource group deployed in Challenge 0
+1. Navigate to Log Analytics Workspace → Monitoring
+1. Select metrics to monitor
 
 ![view log analytics metrics](../../media/loganametrics.png)
 
@@ -230,19 +212,13 @@ With monitoring in place, perform a live test. The Red Team (one or two particip
 
 ![Red flag questions demo](../../media/RedBlueSimulation-v2.gif)
 
-## Tools & Config Needed
-
-- Microsoft Foundry Tracing and Monitoring
-- Automated evaluations using GitHub Actions CI/CD pipeline
-- Microsoft Foundry Content Safety configurations
 
 ## Success Criteria
 
-- Deployment pipeline blocks bad versions from production
-- Production system emits queryable telemetry
+- Deployment pipeline fail when evalutions don't meet baseline results. (Model Drift)
+- Production system emits telemetry; metrics, traces and logs
 - Red Team inputs are handled safely
 - Blue Team traces every interaction successfully
-- Continuous monitoring process is established
 
 This achieves the **Operate capability of Responsible AI**.
 
@@ -255,17 +231,26 @@ This achieves the **Operate capability of Responsible AI**.
 
 ## Learning Resources
 
-- https://azure.microsoft.com/en-us/blog/agent-factory-top-5-agent-observability-best-practices-for-reliable-ai/
+- [Best Pracices](https://azure.microsoft.com/en-us/blogagent-factory-top-5-agent-observability-best-practices-for-reliable-ai/)
 
-- Live metrics - https://learn.microsoft.com/en-us/azure/azure-monitor/app/live-stream?tabs=otel#get-started
+- [Live metrics](https://learn.microsoft.com/en-us/azure/azure-monitor/app/live-stream?tabs=otel#get-started)
 
-- Tracing - https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/trace-application?view=foundry-classic
+- [Tracing](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/trace-application?view=foundry-classic)
 
-- Observability basics - https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability?view=foundry-classic
+- [Observability basics](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability?view=foundry-classic)
 
-- AI Red team - https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/ai-red-teaming-agent?view=foundry-classic
+- [AI Red team](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/ai-red-teaming-agent?view=foundry-classic)
 
-- Upgrade your Azure OpenAI resource to Foundry https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/upgrade-azure-openai?view=foundry-classic
+- [Upgrade your Azure OpenAI resource to Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/upgrade-azure-openai?view=foundry-classic)
 
+</br>
+</br>
 
+---
 #  CHALLENGE 3 COMPLETE !!!
+
+</br>
+</br>
+
+---
+# MICROHACK COMPLETE!!!!!!!!!!!!

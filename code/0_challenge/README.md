@@ -169,15 +169,15 @@ We will set up the initial environment for you to build on top of during your Mi
 <br>
 <br>
 
-## Upload delta files for Microhack to Azure-Search-OpenAI-Demo Application repo
+## Upload Microhack code samples into Azure-Search-OpenAI-Demo Environment
 
 1. There are three python scripts for evaluations in the 0_challenge directory.  They are ```evaluatemh.py```, ```safety_evaluationmh.py``` and ```redteammh.py```.  Upload these files into the ```/evals``` directory in the Azure-Search-OpenAI-Demo repo.  These scripts will use the Azure Evaluation SDK and post the results into the Azure Foundry.  The scripts without the mh suffix are the original files and required for continuous evaluations.  We want to keep both files
 
 1. There is one test file ```ground_truth_test.jsonl``` data set with two questions in the 0_challenge directory.  Upload this file into the ```/evals``` directory in the Azure-Search-OpenAI-Demo repo.  It is critical you upload this file since the python scripts are hard-coded with this file name and uploading it will shorten the runtime of the evaluations.
 
-1. Open the environment files in the /.azure/<resource-group> directory and open the file.  Find the parameter called, ```AZURE_AI_PROJECT_ENDPOINT```.  Insert the Foundry project endpoint from the portal into this environment variable.
-
 1. Replace the ```evaluate.yaml``` in the 0_challenge directory with the same file in the Azure-Search-OpenAI-Demo repo.  The file directory in the Azure-Search-OpenAI-Demo repo is ```./.github/workflow```
+
+1. Open the environment files in the /.azure/<resource-group> directory and open the file.  Find the parameter called, ```AZURE_AI_PROJECT_ENDPOINT```.  Insert the Foundry project endpoint from the portal into this environment variable.
 
 <br>
 <br>
@@ -218,4 +218,4 @@ After you complete all the success criteria, follow the steps in the [Challenge 
 # CHALLENGE 0 COMPLETE!!!!!
 
 
-<!-- These instructions assume there is no net new code for the actual challenges outside of the RAGCHAT application.  If there is no net code we can clone https://aka.ms/ragchat repo.  If there is net new code/scripts we will have to modify the environment setup instructions and copy necessary code to this repo. CH1 is manual data entry and challenge two reuses external repos with no new code set.  The one exception might be red teaming and observability.  We will refactor once each person's readme file is update to validate assumption.  -->
+<!-- TThe current Microhack repo relies on all the source code from Azure-Search-OpenAI-Demo repo.  We plan to take a snapshot of this code in the next release and merge it into the Microhack repo.  This way we can better maintain change control while upgrading to Foundry v2.  -->
