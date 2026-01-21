@@ -43,12 +43,25 @@ Create a GitHub Actions workflow that automates building and deploying the chatb
 
 ### Lab 1 – Instructions
 
-- Configure the pipeline using `azd pipeline config`
+- Before you run the pipeline, check evals/evaluate_config.json and ground_truth.jsonl.
+- evals/evaluate_config.json - "testdata_path": "ground_truth.jsonl"
+- ground_truth.jsonl - make sure you have 5 questions, having more questions may take longer to run the evaluation pipeline. 
+
+- Configure the pipeline using below command.
+
+    ```bash
+       azd pipeline config
+     ```
+- Log in using Github CLI – YES
+- Preferred protocol – HTTPS
+- Authenticate git with your GitHub Credential – YES
+- This will open a web browser to authenticate, copy and enter the code in browser.
+- Select “Federated Service Principal (SP + OIDC)” to authenticate the pipeline to Azure
+
+![config eval pipeline1](../../media/gith-azd-pipe-conf1.png)
 
 ![config eval pipeline](../../media/azdpipeconfig.png)
 
-- If your app is already deployed using `azd up`, follow these steps to configure the pipeline
-- Use the appropriate authentication method for Azure login
 - Check all environment settings in GitHub:
   - GitHub Repo Settings → Secrets and Variables → Actions
 
