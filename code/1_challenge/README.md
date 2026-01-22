@@ -14,61 +14,32 @@ Azure OpenAI model deployment
 
 Ground truth Q&A list (spreadsheet or FoundryIQ evaluation feature) 
 
+---
 ## Lab Activities
 
-From Azure Portal, go to resource group just created in CH0, find and go to Azure OpenAI service . 
+## Lab 1 – Microsoft Foundry Setup
 
-<br>
+### Objective
 
-![Alt text](/media/CH1_Resources.png "Resources")
-<br>
+Set up your environment in Microsoft Foundry, create your first AI Agent, connect it to Azure AI Search, configure monitoring and guardrails, and prepare the agent for evaluation and responsible AI review.
+By the end of this lab, you will have a fully functional AI Agent with a search tool, knowledge base, monitoring, compliance controls, and evaluation pipeline enabled.
 
-Open the Azure Open AI resource in Foundry.
+### Key Tasks
 
-<br>
+Set up your Foundry Agent workspace by creating a new Agent in the Microsoft Foundry portal.
+Review and manage available models, including inspecting deployed models and optionally deploying additional base models from the catalog.
+Integrate Azure AI Search as a tool within the Agent to enable grounded retrieval capabilities.
+Configure or create a search index linked to your storage account to support document grounding.
+Enable RBAC and permissions for the Foundry project identity on Azure AI Search to allow index access and queries.
+Define system instructions for the Agent to guide tool usage and retrieval behavior.
+Enable monitoring and observability by connecting the Agent to Application Insights.
+Create and attach a Knowledge Base through Foundry IQ, backed by your Azure AI Search index.
 
-![Alt text](/media/CH1_Foundry.png "Foundry")
-<br>
- 
+---
 
-Go to Home, and then click on the "Get Started" button to get to the 'Azure OpenAI Service' to 'Microsoft Foundry' migration wizard.
+### Lab 1 – Instructions
 
-<br>
-
-![Alt text](/media/CH1_AzureOpenAI.png "AzureOpenAI")
-<br>
-
-
-Click on Next.
-
-<br>
-
-![Alt text](/media/CH1_Migration.png "Migration")
-<br>
-
-
-Click on "Confirm" and create a project-
-
-<br>
-
-![Alt text](/media/CH1_CreateProject.png "CreateProject")
-<br>
-
-Refer this documentation :
- https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/upgrade-azure-openai?view=foundry-classic&tabs=portal#how-to-upgrade
-
- 
-With the 2026 Foundry project rollout, enterprises get far more than just models.
-You’ll now have access to agentic workflows, a broader model catalog, the Foundry SDK, and enhanced monitoring, observability, and evaluation capabilities - all designed to support multi‑agent architectures at scale. 
-Your Azure OpenAI resource will be upgraded to the Microsoft Foundry resource
-
-<br>
-
-![Alt text](/media/CH1_Upgrade.png "Upgrade")
-<br>
-
-
-See your Foundry endpoint here, click on "Start building" - 
+Once you are on the Foundry portal, click on "Start building" and that switches you to the New Microsoft Foundry portal - 
 <br>
 
 ![Alt text](/media/CH1_FoundryHome.png "FoundryHome")
@@ -86,7 +57,7 @@ Give a name and create the agent-
 
 <br>
 
-![Alt text](/media/CH1_Agentname.png "Agentname")
+![Alt text](/media/CH1_AgentName.png "Agentname")
 <br>
 
 Go to the Models tab, you should be able to see all the deployed models under the 'Deployed' tab.
@@ -169,7 +140,7 @@ Add instructions to your agent to help it invoke the right tools.
 Save the agent configurations, go to the Monitor tab and Connect the agent to the App Insights resource created in CH0. 
 <br>
 
-![Alt text](/media/CH1_Monitor.png "Monitor")
+![Alt text](/media/CH1_monitor.png "Monitor")
 <br>
 
 
@@ -189,6 +160,82 @@ Create a new base on the Azure AI Search and save your agent
 Test your agent-
 Ask some sample questions, available here - (https://github.com/Azure-Samples/azure-search-openai-demo/blob/main/evals/ground_truth.jsonl)
 
+---
+
+## Lab 2 – Responsible AI Impact Assessment
+
+### Objective
+
+Identify and assess the Responsible AI risks associated with your HR Agent, document their severity and likelihood, define mitigation strategies, assign ownership, and ensure alignment with Responsible AI principles before the agent is approved for deployment.
+
+### Key Tasks
+Validate knowledge quality by confirming HR policy documents are correctly indexed and searchable.
+Identify responsible AI risks such as outdated information, biased responses, privacy/PII exposure, or unsafe/misuse attempts.
+Assess severity and likelihood for each identified risk.
+Define mitigation strategies including update workflows, inclusive language reviews, safety refusals, PII protection, and guardrail enforcement.
+Assign owners accountable for addressing each mitigation (HR, AI engineering, privacy/compliance, etc.).
+Align the solution with Microsoft Responsible AI principles (fairness, privacy, transparency, safety, inclusiveness, accountability).
+Review the assessment with stakeholders such as HR, Legal, Privacy, and AI Ethics teams.
+Incorporate feedback and update the assessment to reflect organizational expectations.
+Obtain formal sign-off on the Impact Assessment before proceeding to evaluation and deployment readiness.
+
+---
+
+### Lab 2 – Instructions
+
+After validating HR documents are searchable, open the Responsible AI Impact Assessment template, list potential risks (e.g., outdated info, bias, privacy leaks), assess severity and likelihood, define mitigations for each risk (like update workflows, inclusive language, refusal for personal data), assign owners, confirm alignment with Responsible AI principles (fairness, transparency, privacy), review with HR, Legal, and AI ethics stakeholders, incorporate feedback, and obtain formal sign-off before deployment.
+
+Impact Assessment -
+
+1.Identified Risk	
+
+Outdated or incorrect policy info (agent might give obsolete answers if documents aren’t updated)
+
+Mitigation Strategy:	
+– Schedule regular updates of the HR policy index (e.g., after any HR policy change).
+– Implement a content update checklist with HR team for new/changed policies.– Include policy last-updated timestamps in answers, if feasible, to flag potentially old info.
+
+Owner Accountable:
+	HR Knowledge Manager (ensures documents & index stay current)	
+
+2. Identified Risk:
+Biased or uneven answers (e.g., gendered language or differing info for different groups)
+
+Mitigation Strategy:
+– Review and revise policy wording for inclusive language (e.g., use “primary caregiver” instead of “mother”).
+– Add system prompt guidance to use neutral tone and equal detail for all users.– Test with diverse query phrasing (male vs female perspective, etc.) and verify consistent responses.
+
+Owner Accountable:
+	AI Developer (updates prompts & tests); HR Policy Analyst (reviews content for bias)	
+
+3. Identified Risk:
+Personal data exposure (user asks for individual’s info or system reveals PII)
+
+Mitigation Strategy:	
+– Restrict knowledge sources to non-PII documents only (no personal files indexed).
+– Model instructed to refuse requests for personal/sensitive data.
+– Enable content filter/DLP for PII (e.g., detect patterns like SSN, phone # in outputs).– Test queries asking for private data to ensure the agent safely refuses.
+
+Owner Accountable:
+	Solution Architect / Privacy Officer (ensures data scope and compliance)
+
+4. Identified Risk:	
+Misuse or unsafe requests (attempts to get the bot to violate policies or produce harmful content)
+
+Mitigation Strategy:	
+– Employ Azure AI Content Safety and Foundry guardrails (already active) ] to block disallowed content.
+– Keep system and safety prompts in place to enforce refusals for out-of-scope questions.
+– Conduct red-team testing (prompt injections, extreme inputs) and adjust safeguards if any gap is found.– Log and review misuse attempts to continuously improve defenses.
+
+Owner Accountable:
+AI Engineering Lead (sets guardrail configs and reviews security logs)	
+
+
+Conducting this Responsible AI Impact Assessment not only mitigates risks but also builds confidence among stakeholders and users. Employees will trust the HR assistant more knowing it’s been thoughtfully vetted, and your organization can deploy it knowing that ethical and legal considerations have been addressed up front. This thorough, proactive approach exemplifies Responsible AI in practice – delivering the benefits of AI (quick HR answers and improved productivity) while minimizing potential downsides through careful planning and oversight.
+Now that the Impact Assessment is drafted with risks and mitigations, it needs to be reviewed and signed off by the appropriate stakeholders before the HR assistant goes live. 
+Once the Impact Assessment is approved, the next step is to validate the agent’s real-world performance through manual evaluation.
+
+
 <br>
 
 ![Alt text](/media/CH1_testAgent.png "testAgent")
@@ -201,6 +248,28 @@ At this point, you should be able to see some Monitoring data -
 ![Alt text](/media/CH1_MonitorAgent.png "MonitorAgent")
 <br>
 
+---
+
+## Lab 3 – Guardrails and Evaluations
+
+### Objective
+
+Configure guardrail policies and run automated evaluations in Microsoft Foundry to ensure your Agent operates safely, complies with organizational standards, and delivers accurate, grounded, and reliable responses before deployment.
+
+### Key Tasks
+
+Create a Guardrail Policy using Foundry’s Compliance workspace to enforce content safety filters, prompt shields, and groundedness checks.
+Configure policy scope and exceptions at the subscription or resource group level to control which model deployments must comply.
+Review and finalize the guardrail configuration, ensuring controls align with responsible AI requirements and organizational governance.
+Upload the ground_truth dataset to the Evaluations workspace for accuracy and groundedness testing.
+Run an automated evaluation job to measure relevance, groundedness, safety, and policy compliance of the Agent’s responses.
+Analyze evaluation metrics and results, including failed cases, reasoning traces, and quality indicators.
+Validate monitoring signals in Application Insights to ensure observability during evaluation.
+Confirm evaluation readiness for deployment, ensuring guardrails, safety checks, and performance metrics meet the required thresholds.
+
+---
+
+### Lab 3 – Instructions
 
 Create a guardrail policy- 
 
@@ -317,7 +386,9 @@ Assign the policy scope to the correct subscription/resource group and submit su
 Upload ground_truth.jsonl under Evaluations
 Run an evaluation job and review accuracy, groundedness, citation validity, and safety
 
+## Continue to Challenge 2 and 3
 
+Since Microsoft Foundry is still in preview, please switch back to the classic (old) Foundry experience to complete Challenge 2 (Well-Architected & Trustworthy Foundation) and Challenge 3 (Observability & Operations).
 
 ## Learning Resources
 
