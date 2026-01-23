@@ -28,6 +28,11 @@ We will set up the initial environment for you to build on top of during your Mi
 * Python 3.13: Download Python
 <br>
 
+## Prerequisites for CodeSpaces
+1. An Azure subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/free/).
+1. Validate [Python 3.13+](https://www.python.org/downloads/) is setup in your environment or lower
+1. Codespaces is the recommended environment due to configuration and fresh environment
+
 ## Recommended Regions
 * North Central US (northcentralus)
 * South Central US (southcentralus)
@@ -48,23 +53,30 @@ We will set up the initial environment for you to build on top of during your Mi
 
 ## Deploy the Azure Resources
 
-1. Open a terminal window and confirm prerequisites are complete
-1. Clone the ```azure-search-openai-demo``` repo into your local environment by running the following command:
+1. Start the Microhack on Local or Codespaces
 
-    ```bash
-    git clone https://github.com/Azure-Samples/azure-search-openai-demo.git
-    ```
+    a. Open a terminal window for local deployments and confirm prerequisites are complete
+        
+    * Fork the [Azure-Search-OpenAI-Demo](https://github.com/Azure-Samples/azure-search-openai-demo/) repo into your Github account
+        
+    * Clone the forked repo in your Github account to your environment by running the following command:
+
+    * ```git clone https://github.com/<Github username>/azure-search-openai-demo.git```
+
+    * At the terminal window confirm the home directory /azure-search-openai-demo
+    
+    b. For Codespaces, go into your web browser and login to github
+
+    * Fork the [Azure-Search-OpenAI-Demo](https://github.com/Azure-Samples/azure-search-openai-demo/) repo into your Github account
+        
+    * `Click on Code` (Green) button and click on `+` button (Create a codepspaces on main).  This will take a few minutes to provision a Codespaces instance.  At the bottom of the browers is a terminal window and will accept commands when provisioning is complete.
+
+    * At the terminal window confirm the home directory /azure-search-openai-demo
 
 1. Login to your Azure Account in the terminal window
 
     ```bash
     azd auth login
-    ```
-
-1. Go into the repo you cloned for azure-search-openai-demo.
-
-   ```bash
-    cd ./azure-search-openai-demo
     ```
 
 1. Create a new azd environment
@@ -149,7 +161,9 @@ We will set up the initial environment for you to build on top of during your Mi
 
 ## Setup Project Connections
 
-1. Setup Project Connections for these four resources; Foundry models, Azure AI Search, Azure Storage Account and App Insights.  All connections should use Entra ID except for AppInsights which uses an API Key.  
+1. Setup Project Connections for these four resources; Foundry models, Azure AI Search, Azure Storage Account and App Insights.  All connections should use Entra ID except for AppInsights which uses an API Key. 
+
+    Setup Project Connections in the V1 Foundry Portal.  Make sure the New Foundry Switch is "OFF" when setting the connections
 
 
     ![Alt text](/media/Project_Connections.jpg "Project Connections")
@@ -216,6 +230,10 @@ After you complete all the success criteria, follow the steps in the [Challenge 
 <br>
 
 # CHALLENGE 0 COMPLETE!!!!!
+
+# Contributors to this Microhack
+
+We are grateful to the hard-work and thought leadership done by Pamela Fox and Matt Gotteiner. We were inspired and informed by their work.  We have reused their https://aka.ms/ragchat repo and studied their podcast series RAG Deep dive http://aka.ms/ragdeepdive.  We highly recommend to watch this content when preparing your applications to move into production.
 
 
 <!-- TThe current Microhack repo relies on all the source code from Azure-Search-OpenAI-Demo repo.  We plan to take a snapshot of this code in the next release and merge it into the Microhack repo.  This way we can better maintain change control while upgrading to Foundry v2.  -->

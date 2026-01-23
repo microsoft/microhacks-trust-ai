@@ -12,8 +12,13 @@ In Challenge 2, participants take the role of a DevOps/AI engineer in charge of 
 
 ## Tools & Config Needed
 1.	WAF & Security Compliance: The [Azure Review Checklist Spreadsheet](https://github.com/Azure/review-checklists/blob/main/spreadsheet/README.md) and [Azure Review Checklist Script](https://github.com/Azure/review-checklists/blob/main/scripts/checklist_graph.sh) on GitHub.
+
 1. Automated Quality & Safety evaluation python scripts will run on the local compute environment and save the results in the Microsoft Foundry Portal.  A GPT-4o model will be our AI Judge to help us score each metric and provide a reason code for the rating.  These results are viewable in the portal.
+
 1.	[Azure AI Foundry Red Teaming Agent](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic). The goal is to simulate a "red team" attack by programmatically running an agent to break the rules on the local development environment.
+
+1. Ensure the New Foundry Control Switch in the header of the Foundry Portal is switched to "OFF".  All CH2 and CH3 Labs will be using Foundry V1 portal "Classic". Foundry V2 portal is in Preview 
+
 <br>
 
 ## Lab Activities

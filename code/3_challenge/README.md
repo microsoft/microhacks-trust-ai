@@ -19,6 +19,8 @@ This completes the DevOps loop and achieves the **Operate stage of Responsible A
 - Microsoft Foundry Tracing and Monitoring
 - Automated evaluations using GitHub Actions CI/CD pipeline
 - Microsoft Foundry Content Safety configurations
+- Ensure the New Foundry Control Switch in the header of the Foundry Portal is switched to "OFF".  All CH2 and CH3 Labs will be using Foundry V1 portal "Classic".  Foundry V2 portal is in Preview 
+
 
 ---
 ## Lab Activities
