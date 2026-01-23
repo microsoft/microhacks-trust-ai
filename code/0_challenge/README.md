@@ -15,8 +15,9 @@ We will set up the initial environment for you to build on top of during your Mi
 1. An Azure subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/free/).
 1. Install the [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli).
 1. Install [Powershell 7 (supported on Windows, macOS, and Linux)](https://learn.microsoft.com/powershell/scripting/install/installing-powershell).
-1. Install [Python 3.13+](https://www.python.org/downloads/).
+1. Install [Python 3.13](https://www.python.org/downloads/).
 1. Install the Git CLI. You can download it from the [Git website](https://git-scm.com/downloads).
+1. Install Node.
 1. Install VS Code on your local PC if not using Codespaces.
 <br>
 
@@ -31,7 +32,6 @@ We will set up the initial environment for you to build on top of during your Mi
 ## Prerequisites for CodeSpaces
 1. An Azure subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/free/).
 1. Validate [Python 3.13+](https://www.python.org/downloads/) is setup in your environment or lower
-1. Codespaces is the recommended environment due to configuration and fresh environment
 
 ## Recommended Regions
 * North Central US (northcentralus)
