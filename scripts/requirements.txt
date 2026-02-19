@@ -8,7 +8,7 @@ azure-ai-agents==1.1.0
 openai==2.16.0
 azure-search-documents==11.6.0
 azure-identity==1.25.1
-pypdf==6.6.2
+pypdf==6.7.1
 reportlab==4.4.9
 python-dotenv==1.2.1
 pandas==2.3.3
