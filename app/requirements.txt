@@ -8,7 +8,7 @@ azure-search-documents==11.6.0
 fastapi==0.128.1
 uvicorn[standard]==0.40.0
 pydantic==2.12.5
-pydantic-settings==2.12.0
+pydantic-settings==2.14.2
 
 # OpenTelemetry Tracing Dependencies (Azure Application Insights)
 # Use azure-monitor-opentelemetry for automatic compatible version resolution
