@@ -27,14 +27,13 @@ To provide attendees with guidance and understanding on the Microhack goals, con
 
 ## Microhack Challenges
 
-To get started with this workshop, open four challenge links below.  Start with Challenge 0 for environment setup instructions.
-
-There are four challenges for this workshop.  They are;
+There are four challenges in this workshop. Start with Challenge 0 for environment setup instructions.
 
 * Challenge 0 [Environment Setup](code/0_challenge/README.md)
 * Challenge 1 [Responsible AI - Designing a Reliable & Ethical Application](code/1_challenge/README.md)
 * Challenge 2 [Well-architected & Trustworthy Foundation](code/2_challenge/README.md)
 * Challenge 3 [Observability & Operations](code/3_challenge/README.md)
+
 
 ### Trustworthy AI Overview
 

@@ -38,7 +38,7 @@ A simple chat interface that uses Azure OpenAI with managed identity authenticat
                 │    Azure OpenAI          │
                 │    (Cognitive Services)  │
                 │                          │
-                │  • gpt-4o-mini           │
+                │  • gpt-5.4-mini          │
                 │  • Managed Identity Auth │
                 └──────────────────────────┘
 ```
@@ -61,7 +61,7 @@ A simple chat interface that uses Azure OpenAI with managed identity authenticat
 1. **Set environment variables on Mac OS X or Linux:**
    ```bash
    export AZURE_OPENAI_ENDPOINT="https://your-openai-service.openai.azure.com/"
-   export AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini"
+  export AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-5.4-mini"
    ```
 
 2. **Install dependencies:**
@@ -97,7 +97,7 @@ A simple chat interface that uses Azure OpenAI with managed identity authenticat
    docker build -t chat-app .
    docker run -p 8080:8080 \
      -e AZURE_OPENAI_ENDPOINT="https://your-openai-service.openai.azure.com/" \
-     -e AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini" \
+     -e AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-5.4-mini" \
      chat-app
    ```
 
@@ -119,10 +119,11 @@ curl -X POST "http://localhost:8080/chat" \
   -H "Content-Type: application/json" \
   -d '{
     "message": "What is Azure OpenAI?",
-    "conversation_history": [],
-    "temperature": 0.7
+    "conversation_history": []
   }'
 ```
+
+For GPT-5 and other reasoning-model deployments, Chat Completions ignores sampling parameters like `temperature`.
 
 ### Example: Chat with conversation history
 
@@ -168,7 +169,7 @@ The app uses the following environment variables (set automatically by Bicep):
 | Variable | Description |
 |----------|-------------|
 | `AZURE_OPENAI_ENDPOINT` | Azure OpenAI service endpoint URL |
-| `AZURE_OPENAI_CHAT_DEPLOYMENT` | Model deployment name (default: gpt-4o-mini) |
+| `AZURE_OPENAI_CHAT_DEPLOYMENT` | Model deployment name (default: gpt-5.4-mini) |
 | `AZURE_CLIENT_ID` | User-assigned managed identity client ID |
 
 ## Authentication

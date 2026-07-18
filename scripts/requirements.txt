@@ -1,8 +1,6 @@
-azure-ai-projects==1.0.0
-azure-ai-agents==1.1.0
+azure-ai-projects==2.0.0b4
+azure-ai-agents==1.2.0b5
 
-# azure-ai-projects==2.0.0b3
-# azure-ai-agents==1.2.0b5
 # agent-framework==1.0.0b260123
 
 openai==2.16.0

@@ -14,11 +14,12 @@ In Challenge 2, participants take the role of a DevOps/AI engineer in charge of 
 
 1. WAF & Security Compliance: The [Azure Review Checklist Spreadsheet](https://github.com/Azure/review-checklists/blob/main/spreadsheet/README.md) and [Azure Review Checklist Script](https://github.com/Azure/review-checklists/blob/main/scripts/checklist_graph.sh) on GitHub.
 
-1. Automated Quality & Safety evaluation python scripts will run on the local compute environment and save the results in the Microsoft Foundry Portal.  A GPT-4o model will be our AI Judge to help us score each metric and provide a reason code for the rating.  These results are viewable in the portal.
+1. Automated Quality & Safety evaluation python scripts will run on the local compute environment and save the results in the Microsoft Foundry Portal.  A gpt-4o model will be our AI Judge to help us score each metric and provide a reason code for the rating.  These results are viewable in the portal.
+
 
 1. [Azure AI Foundry Red Teaming Agent](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic). The goal is to simulate a "red team" attack by programmatically running an agent to break the rules on the local development environment.
 
-1. Ensure the New Foundry Control Switch in the header of the Foundry Portal is switched to "OFF".  All challenges are using Foundry "new" portal experience not "Classic". 
+1. Ensure the New Foundry Control Switch in the header of the Foundry Portal is switched "ON". 
 
 </br>
 
@@ -51,11 +52,15 @@ In Challenge 1, we tested our application with a small subset of questions and h
 
      ![Alt text](/media/quality_metrics.png "Quality Metrics")
 
-1. Go to the command line terminal in codespaces and submit this script to run quality metrics.  
+1. Go to the command line terminal in codespaces and submit the following script to run quality metrics.  
 
-    ```bash
-    python ./scripts/04_run_evaltarget.py
-    ```
+### Updated Evaluation Commands (New vs Classic Foundry)
+
+For the **new Foundry experience**, use:
+
+```bash
+python ./scripts/07_run_evaltarget_new_portal.py
+```
 
    This evaluation will take approximately 20 seconds to complete. The Target application is running in a container and might need you to rerun this script multiple times when it times-out.  Go into the Microsoft Foundry and review the Automated Evaluations.  Review each Q&A pair for these scores and reason.  The script submits just 11 question & answer pairs to shorten execution time.
 
@@ -67,9 +72,12 @@ In Challenge 1, we tested our application with a small subset of questions and h
 
 1. The second set of evaluations will be for the safety metrics.  This scripts will generate by default 5 simulations which are adversarial questions to submit to the target application.  Safety evaluations will ensure the answers are appropriate and do not contain harmful or sensitive content. Run this command in the terminal.
 
+   For the **new Foundry experience**, use:
+
    ```bash
-   python ./scripts/05_safety_evals.py
+   python ./scripts/08_safety_evals_new_portal.py
    ```
+
    The parameters are:
    * `--max_simulations`: The maximum number of simulated user queries. Default is `5`. The higher the number, the longer the evaluation will take. The default of `5` simulations will take about 1 minutes to run, which includes both the time to generate the simulated adversarial questions and the time to evaluate it.  
 
@@ -89,9 +97,13 @@ The AI Red Team Agent will be able to assess risk categories and attack strategi
 
 1. Execute the Red Team agent script.  The Red Teaming agent will use a library of [attack prompts across categories](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic#supported-risk-categories) By default, the script runs a baseline scan with no attack transformations. An advanced scan with multiple attack strategies (e.g., MODERATE, Base64, ROT13) is available but commented out in the script.
 
+   For the **new Foundry experience**, use:
+
    ```bash
-   python ./scripts/06_redteameval.py 
+   python ./scripts/09_redteameval_new_portal.py
    ```
+
+   * **New Foundry flow (`09_redteameval_new_portal.py`)**: Uses cloud Red Team runs in the new portal. The result schema and presentation differ from classic and may emphasize evaluator outcomes and run-level summaries instead of the same classic attack-technique layout.
 
 1. The [AI Red teaming results](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/run-scans-ai-red-teaming-agent?view=foundry-classic#results-from-your-automated-scans) typically categorizes findings like: number of attempts where the LLM gave a policy-violating response vs. how many it safely refused. Focus on critical categories: Did the LLM ever reveal the content of its system prompt or internal knowledge (a sign of prompt injection success)? Did it produce disallowed content (e.g., instructions to do something harmful) when provoked?  
 

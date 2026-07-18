@@ -9,10 +9,16 @@
       "value": "${AZURE_LOCATION}"
     },
     "chatModel": {
-      "value": "${AZURE_CHAT_MODEL=gpt-4.1-mini}"
+      "value": "${AZURE_CHAT_MODEL=gpt-5.4-mini}"
     },
     "chatModelVersion": {
-      "value": "${AZURE_CHAT_MODEL_VERSION=2025-04-14}"
+      "value": "${AZURE_CHAT_MODEL_VERSION=2026-03-17}"
+    },
+    "evalModel": {
+      "value": "${AZURE_EVAL_MODEL=gpt-5.1}"
+    },
+    "evalModelVersion": {
+      "value": "${AZURE_EVAL_MODEL_VERSION=2024-08-06}"
     },
     "embeddingModel": {
       "value": "${AZURE_EMBEDDING_MODEL=text-embedding-3-large}"

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - model
+      - main
 
 permissions:
   id-token: write
@@ -186,64 +186,53 @@ jobs:
           az account show -o table
           az ad sp show --id "$AZURE_CLIENT_ID" --query "{displayName:displayName, objectId:id, appId:appId}" -o table
 
-      - name: Run evaluation against deployed app
+      - name: Run evaluation against deployed app (new Foundry)
         run: |
-          # If the script hits input() it will otherwise hang CI.
-          printf "y\n" | python scripts/04_run_evaltarget.py
-
+          python scripts/07_run_evaltarget_new_portal.py --max-items 11
       - name: Summarize evaluation results (markdown)
         shell: bash
         run: |
           set -e
           python - <<'PY'
-          import json, statistics, pathlib
+          import json
+          import pathlib
 
-          path = pathlib.Path("evals/results/quality/results_target.jsonl")
-          if not path.exists():
-            raise SystemExit(f"Missing results file: {path}")
+          responses_path = pathlib.Path("evals/results/quality/results_target_new_portal.jsonl")
+          run_info_path = pathlib.Path("evals/results/quality/new_portal_eval_run.json")
+          if not responses_path.exists():
+            raise SystemExit(f"Missing results file: {responses_path}")
+          if not run_info_path.exists():
+            raise SystemExit(f"Missing run metadata file: {run_info_path}")
 
-          rows=[]
-          for line in path.read_text(encoding="utf-8").splitlines():
-            line=line.strip()
+          rows = []
+          for line in responses_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
             if line:
               rows.append(json.loads(line))
 
-          def pick_score(r, key):
-            # defensive: supports a few common shapes
-            if isinstance(r, dict):
-              ev = r.get("evaluations", {})
-              if isinstance(ev, dict) and key in ev:
-                v = ev[key]
-                if isinstance(v, dict): return v.get("score")
-                return v
-              if key in r:
-                v = r[key]
-                if isinstance(v, dict): return v.get("score")
-                return v
-            return None
+          run_info = json.loads(run_info_path.read_text(encoding="utf-8"))
+          status = run_info.get("status", "unknown")
+          eval_id = run_info.get("eval_id", "")
+          run_id = run_info.get("run_id", "")
 
-          def clean(xs):
-            out=[]
-            for x in xs:
-              if isinstance(x, (int,float)):
-                out.append(float(x))
-            return out
-
-          rel = clean([pick_score(r,"relevance") for r in rows])
-          grd = clean([pick_score(r,"groundedness") for r in rows])
-
-          def mean(xs):
-            return round(statistics.mean(xs), 4) if xs else "n/a"
+          error_count = 0
+          for row in rows:
+            response_text = str(row.get("response", ""))
+            if response_text.startswith("Error calling app:"):
+              error_count += 1
 
           md = []
-          md.append("## ✅ RAG Evaluation Results (Target App)")
+          md.append("## ✅ RAG Evaluation Results (New Foundry)")
           md.append("")
+          md.append(f"- Run status: **{status}**")
           md.append(f"- Samples: **{len(rows)}**")
-          md.append(f"- Relevance mean: **{mean(rel)}**")
-          md.append(f"- Groundedness mean: **{mean(grd)}**")
+          md.append(f"- App call errors: **{error_count}**")
+          md.append(f"- Eval ID: `{eval_id}`")
+          md.append(f"- Run ID: `{run_id}`")
           md.append("")
           md.append("Artifacts:")
-          md.append("- `evals/results/quality/results_target.jsonl`")
+          md.append("- `evals/results/quality/results_target_new_portal.jsonl`")
+          md.append("- `evals/results/quality/new_portal_eval_run.json`")
 
           out = pathlib.Path("evals/results/quality/eval_summary.md")
           out.parent.mkdir(parents=True, exist_ok=True)
@@ -257,5 +246,6 @@ jobs:
         with:
           name: eval_results_target
           path: |
-            evals/results/quality/results_target.jsonl
+            evals/results/quality/results_target_new_portal.jsonl
+            evals/results/quality/new_portal_eval_run.json
             evals/results/quality/eval_summary.md

@@ -214,9 +214,9 @@ Once you have logged into the Azure Developer CLI and Azure CLI using one of the
 
 - Type this question into the prompt window, "What is the out-of-pocket maximum for the Northwind Standard plan?".  The returned answer should mention $6,000 per person per year.
 
-- Open Foundry Project to see model deployments.  Search for 'gpt-4.1-mini' as a model name
+- Open Foundry Project to see model deployments.  Search for 'gpt-5.4-mini' as a model name
 
-- Click on Monitor icon and click on the Resource Usage Tab.  For Model deployment, select ```text-embedding-3-large```.  You should see numbers for Total requests and Total Token count
+- Click on Models icon and navigate to the ```text-embedding-3-large```  Model deployment. Then click on the Monitor tab. You should see numbers for Total requests and Total Token count
 <br>
 
 ## Continue to Challenge 1
@@ -240,7 +240,7 @@ After you complete all the success criteria, follow the steps in the [Challenge 
 <br>
 <br>
 
-# CHALLENGE 0 COMPLETE!!!!!
+# CHALLENGE 0 COMPLETE!!!!! YAY!!
 
 <br>
 <br>

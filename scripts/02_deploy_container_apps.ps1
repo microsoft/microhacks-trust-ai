@@ -82,7 +82,7 @@ Write-Host "  Container Registry: $env:AZURE_CONTAINER_REGISTRY_NAME"
 Write-Host "  Container App:      $env:AZURE_CONTAINER_APP_NAME"
 Write-Host "  OpenAI Endpoint:    $env:AZURE_OPENAI_ENDPOINT"
 Write-Host "  Search Endpoint:    $env:AZURE_AI_SEARCH_ENDPOINT"
-Write-Host "  Chat Model:         $(if ($env:AZURE_CHAT_MODEL) { $env:AZURE_CHAT_MODEL } else { 'gpt-4o-mini' })"
+Write-Host "  Chat Model:         $(if ($env:AZURE_CHAT_MODEL) { $env:AZURE_CHAT_MODEL } else { 'gpt-5.1' })"
 $appInsights = if ($env:AZURE_APPINSIGHTS_CONNECTION_STRING) { $env:AZURE_APPINSIGHTS_CONNECTION_STRING } else { "(not configured)" }
 Write-Host "  App Insights:       $appInsights"
 Write-Host ""
@@ -106,7 +106,7 @@ az acr build `
 Write-Host ""
 Write-Host "Updating Container App with environment variables..." -ForegroundColor $YELLOW
 
-$chatModel = if ($env:AZURE_CHAT_MODEL) { $env:AZURE_CHAT_MODEL } else { "gpt-4o-mini" }
+$chatModel = if ($env:AZURE_CHAT_MODEL) { $env:AZURE_CHAT_MODEL } else { "gpt-5.1" }
 $searchIndex = if ($env:AZURE_SEARCH_INDEX_NAME) { $env:AZURE_SEARCH_INDEX_NAME } else { "documents" }
 
 az containerapp update `

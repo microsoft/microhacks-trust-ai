@@ -33,6 +33,15 @@ from .tracing import (
 logger = logging.getLogger(__name__)
 
 
+REASONING_MODEL_PREFIXES = (
+    'gpt-5',
+    'o1',
+    'o3',
+    'o4',
+    'codex-mini',
+)
+
+
 # RAG System Prompt - based on azure-search-openai-demo pattern
 RAG_SYSTEM_PROMPT = """You are an intelligent assistant helping users with questions based on the provided documents.
 Answer ONLY with the facts listed in the sources below. If there isn't enough information below, say you don't know.
@@ -139,6 +148,12 @@ class RAGService:
                 credential=self.credential
             )
         return self._search_client
+
+    @staticmethod
+    def _is_reasoning_model(deployment: str) -> bool:
+        """Return True when the deployment uses the reasoning-model parameter set."""
+        deployment_name = deployment.lower()
+        return deployment_name.startswith(REASONING_MODEL_PREFIXES)
     
     def search_documents(
         self,
@@ -391,6 +406,7 @@ class RAGService:
         deployment = self.settings.azure_openai_chat_deployment
         max_tokens = max_tokens or self.settings.max_tokens
         temperature = temperature if temperature is not None else self.settings.temperature
+        is_reasoning_model = self._is_reasoning_model(deployment)
         
         logger.info(f"🤖 RAG STEP 4: Calling OpenAI model: {deployment}")
         logger.info(f"   Message count: {len(messages)}, Stream: {stream}")
@@ -410,6 +426,7 @@ class RAGService:
             add_span_attribute("gen_ai.request.temperature", temperature)
             add_span_attribute("gen_ai.request.streaming", stream)
             add_span_attribute("gen_ai.request.message_count", len(messages))
+            add_span_attribute("gen_ai.request.reasoning_model", is_reasoning_model)
             
             # Calculate approximate input size
             input_chars = sum(len(m.get("content", "")) for m in messages)
@@ -425,14 +442,23 @@ class RAGService:
                 add_span_attribute(f"gen_ai.request.message_{i}.content", content_preview)
             
             add_span_event("llm_call_started", {"model": deployment, "stream": stream})
-            
-            response = self.openai_client.chat.completions.create(
-                model=deployment,
-                messages=messages,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                stream=stream
-            )
+
+            request_args = {
+                "model": deployment,
+                "messages": messages,
+                "stream": stream,
+            }
+            if is_reasoning_model:
+                request_args["max_completion_tokens"] = max_tokens
+                add_span_event(
+                    "llm_reasoning_compat_mode",
+                    {"ignored_parameter": "temperature"}
+                )
+            else:
+                request_args["max_tokens"] = max_tokens
+                request_args["temperature"] = temperature
+
+            response = self.openai_client.chat.completions.create(**request_args)
             
             if not stream and hasattr(response, 'usage'):
                 add_span_attribute("gen_ai.response.prompt_tokens", response.usage.prompt_tokens)

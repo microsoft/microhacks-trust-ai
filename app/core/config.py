@@ -20,7 +20,7 @@ class Settings(BaseSettings):
         description="Azure OpenAI service endpoint"
     )
     azure_openai_chat_deployment: str = Field(
-        default="gpt-4o-mini",
+        default="gpt-5.4-mini",
         alias="AZURE_OPENAI_CHAT_DEPLOYMENT",
         description="Chat model deployment name"
     )
